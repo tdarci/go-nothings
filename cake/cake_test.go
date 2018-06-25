@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/tdarci/foo/cake"
+	"github.com/tdarci/go-nothings/cake"
 )
 
 var defaults = cake.Shop{

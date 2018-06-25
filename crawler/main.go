@@ -68,14 +68,14 @@ func main() {
 
 	// process input
 	go func() {
-		pending <- 1
-		crawlResults <- programArgs()
+		pending <- 1                  // adding item to crawlResults
+		crawlResults <- programArgs() // this gets things rolling...
 	}()
 
 	// Notice when we have no more pending operations.
 	// At that point, this program is done.
 	go func() {
-		// Note that once this function is running it will take items off of pending as soon as they are put there. So no blocking to worry about.
+		// Once this function is running it will take items off of pending as soon as they are put there. So no blocking to worry about.
 		for pend := range pending {
 			pendCount += pend
 			// log.Printf("Pending: %d", pendCount)
@@ -90,13 +90,12 @@ func main() {
 	for i := 0; i < concurrentWorkerCount; i++ {
 		// each of these makes a crawler to run concurrently. these goroutines die when the program exits
 		go func() {
-			for link := range unseenLinks { // We will block here until there's something to take off of the channel
-				// We keep looping until something closes unseenLinks or main exits
+			for link := range unseenLinks { // We will block here until there's something to take off of the channel and keep looping until something closes unseenLinks or main exits
 				//
 				// We have 2 actions for pending channel now... +1 for initiating extract() and -1 for taking something off of unseenLinks. So no need to do anything.
 				foundLinks := extract(link)
 				if foundLinks != nil {
-					pending <- 1
+					pending <- 1 // adding item to crawlResults
 					go func() { crawlResults <- foundLinks }()
 				}
 				pending <- -1 // extract() is complete
@@ -112,7 +111,7 @@ func main() {
 				// Print out every time we find one.
 				fmt.Printf("* Found a link: %s\n", curLink)
 				seen[curLink] = true
-				pending <- 1
+				pending <- 1 // adding item to unseenLinks
 				unseenLinks <- curLink
 			}
 		}

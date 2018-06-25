@@ -1,53 +1,111 @@
 ### Chapter 8: Goroutines & Channels
 
+Computers are amazing... they can do more than one thing at a time... this laptop has several CPUs... and each can be doing a different task.
+
+So, instead of saying:
+
+1. do this
+2. then do that
+3. and finally do the third thing
+
+We can say this:
+- do this
+- do that
+- do the third thing
+
+and let the computer do them _all at once_
+
+however, this can get tricky when we want to _coordinate_ between these different actions
+
 #### concurrent programming, 2 forms
 ##### form 1: communicating sequential processes (CSP)...
-- multiple processes running at the same time-ish
-- values passed between processes, but variables not shared --proverb--> "Don't communicate by sharing memory, share memory by communicating"
+- multiple processes running at the same time
+- values passed between processes, but variables not shared
+- --Go proverb--> `"Don't communicate by sharing memory, share memory by communicating"`
 - this is __goroutines & channels__
-- major feature of Go
+- major feature of Go. Go aims to bring _simplicity_ to many things, but its approach to concurrent programming is one of its bolder steps at achieving simplicity
 
 ##### form 2: shared memory multithreading
 - chapter 9
 
-#### goroutine mechanics
+
+```
+
+
+
+
+====================================================================================
+
+
+
+
+```
+
+#### goroutines
 - a goroutine is a process
 - goroutine #1: the main goroutine
     - program starts and calls `main()`
-- launch a new goroutine with `go` as in `go myfunction(1, 2, "wazoo")`
-    - `myfunction()` starts running, but the line that invoked it does not wait for it to complete
-- when main goroutine exits or program is terminated, all active goroutines are abruptly terminated
-- these things are lightweight. they are not threads, though they function the same.
-- example (spinner): https://github.com/adonovan/gopl.io/blob/master/ch8/spinner/main.go
+- launch a new goroutine with "go" as in `go myfunction(1, 2, "wazoo")`
+    - `myfunction()` starts running, but the line that invoked it _does not wait_ for it to complete
+- main goroutine exits ==> all active goroutines abruptly terminated
+- lightweight. not threads, though they function the same. do a lot of sleeping and waking
+- example: [spinner](https://github.com/adonovan/gopl.io/blob/master/ch8/spinner/main.go)
+    - how many goroutines?
+
+```
+
+
+
+
+====================================================================================
+
+
+
+
+```
 
 #### channels
-- channels connect goroutines
+- channels connect goroutines. short for "communication channel"
 - one goroutine puts something into a channel (__SEND__) and another routine takes that something out of the channel (__RECEIVE__)
 - a channel is declared to contain a specified TYPE
 - zero value: nil
 - make an integer channel: `funChannel := make(chan int)`
-- SEND x through the channel... `funChannel <- x`
-- RECEIVE what's been put into the channel... `foo = <-funChannel`
+- SEND x into the channel: `funChannel <- x`
+- RECEIVE what's been put into the channel: `foo = <-funChannel`
 - CLOSE a channel: `close(funChannel)`
     - check to see if closed `foo, stillOpen = <-funChannel`
-    - but don't close it twice!
+    - don't close it twice!
 - unbuffered channels...
     - BLOCK ON SEND until item in the channel is received
     - and BLOCK ON RECEIVE until something is loaded into the channel
-    - aka: SYNCHRONOUS channel... sender can't continue until something takes my message off the channel... value is received before sender's goroutine reawakes
-- channel contents
+    - "SYNCHRONOUS" channel... sender cannot continue until something takes my message off the channel... value is received before sender's goroutine reawakes
+- pass messages... or signal events
     - value passed (message) may be significant
-    - or, adding to the channel may simply signify that it's time to do the next thing, but there is no value being passed, in which case we create a channel of type `struct{}{}` or `bool` or `int`
+    - or, adding to the channel may simply signify that it's time to do the next thing, but there is no value being passed, in which case we create a channel of type `struct{}{}` or `bool` or `int` (and ignore the value)
 - buffered channels...
     - have a CAPACITY... a number of messages the channel can contain before blocking senders
     - buffered channels do not block on send until the buffer is filled up
     - make a buffered one: `funChannel := make(chan int, 3)`
     - more on using these later...
 
+```
+
+
+
+
+====================================================================================
+
+
+
+
+```
+
 #### channels as pipelines
-read this later: https://blog.golang.org/pipelines
+[the famous pipelines blog post](https://blog.golang.org/pipelines)
 
 example (pipeline1): generate numbers... square each of these numbers... print each square... uses unbuffered channels
+- how many goroutines?
+
 ```go
 package main
 
@@ -87,9 +145,20 @@ func main() {
 }
 
 ```
+```
+
+
+
+
+====================================================================================
+
+
+
+
+```
 
 #### uni-directional channels
-can declare as uni-directional, like so `func foo(sendChannel chan<- int)` and `func bar(receiveChannel <-chan int)`
+one-way channel, like so: `func foo(mySendChannel chan<- int)` and `func bar(myReceiveChannel <-chan int)`
 
 let's re-do our pipeline example w/uni-directional channels (pipeline-uni)
 ```go
@@ -135,7 +204,18 @@ func main() {
 
 ```
 
-#### what about buffered channels...
+```
+
+
+
+
+====================================================================================
+
+
+
+
+```
+#### pipeline + buffered channels...
 
 we have this...
 ```go
@@ -148,18 +228,112 @@ func main() {
 but what if our workers work at different rates?
 
 the cake example... BAKER --> ICER --> INSCRIBER
+- work at different rates
+- very similar to the squarer example, but create channels with **buffers** and have **multiple icers**
+- buffered channels so a sender can dump more than one thing into a channel without having to wait... and so a bunch of receivers can grab items off the channel
+- example lets you play with channel buffer size and number of workers
+- [book code](https://github.com/adonovan/gopl.io/blob/master/ch8/cake/cake.go) (not now)
 
-https://github.com/adonovan/gopl.io/blob/master/ch8/cake/cake.go (not now)
+```
 
-the idea:
-- buffered channels so a worker can dump more than one thing into a channel without having to wait
-- multiple icers (or bakers or inscribers or whatever)
 
+
+
+====================================================================================
+
+
+
+
+```
 #### looping in parallel
-We want to do the same thing to a bunch of files or whatever. "Concurrency (doing many things at once) is not parallelism (doing the same thing lots of times concurrently)"
+We want to do the same thing to a bunch of files or whatever. "Concurrency (composition of independently-executing processes) is not parallelism (simultaneous execution of computations, often related)"
 
-example: https://github.com/adonovan/gopl.io/tree/master/ch8/thumbnail (not now)
+[looping in parallel example](https://github.com/adonovan/gopl.io/tree/master/ch8/thumbnail)
 
+**makeThumbnails5** makes thumbnails for the specified files in parallel & returns the generated file names in an arbitrary order, or an error if any step failed.
+
+**skip this one**
+
+```go
+func makeThumbnails5(filenames []string) (thumbfiles []string, err error) {
+	type thumbResult struct {
+		thumbfile string
+		err       error
+	}
+
+	ch := make(chan thumbResult, len(filenames))
+	for _, f := range filenames {
+		go func(f string) {
+			var item thumbResult
+			item.thumbfile, item.err = thumbnail.ImageFile(f) // generate a thumbnail
+			ch <- it // stick our result onto our channel
+		}(f)
+	}
+
+	for range filenames { // very odd loop... no variable... works because we know how many files we received
+		it := <-ch
+		if it.err != nil {
+			return nil, it.err
+		}
+		thumbfiles = append(thumbfiles, it.thumbfile)
+	}
+
+	return thumbfiles, nil
+}
+
+```
+
+
+**makeThumbnails6** makes thumbnails for each file received from the channel & returns the number of bytes occupied by the files it creates.
+
+It demonstrates the use of a `WaitGroup`
+```go
+func makeThumbnails6(filenames <-chan string) int64 {
+	sizes := make(chan int64)
+	var wg sync.WaitGroup // number of working goroutines
+	wg.Add(1) // want to stay open so long as filenames is open. correct? I think so...
+	for f := range filenames {
+		wg.Add(1)
+		// worker
+		go func(f string) {
+			defer wg.Done()
+			thumb, err := thumbnail.ImageFile(f)
+			if err != nil {
+				log.Println(err)
+				return
+			}
+			info, _ := os.Stat(thumb) // OK to ignore error
+			sizes <- info.Size()
+		}(f)
+	}
+	wg.Done() // filenames is now closed
+
+	// closer
+	go func() {
+		wg.Wait()
+		close(sizes)
+	}()
+
+	var total int64
+	for size := range sizes {
+		total += size // total is protected since it is only written by the path through this unbuffered channel
+	}
+	return total
+}
+
+```
+
+```
+
+
+
+
+====================================================================================
+
+
+
+
+```
 #### select
 - The `select` statement lets us wait on multiple channels (reads &/or writes) and act as soon as one of them is ready. If multiple are ready at the same time, selection is random.
 
@@ -178,104 +352,7 @@ select {
 
 #### web crawler example
 
-web crawler, parallel processing, but limited to 20 concurrent workers using tokens/semaphores... (skip)
-```go
-var tokens = make(chan struct{}, 20)
-
-func crawl(url string) []string {
-    fmt.Println(url)
-    tokens<- struct{}{} // BLOCKS until there is room in the channel's buffer
-    list, err := links.Extract(url)
-    <-tokens // We're done, so free up a spot in the buffer for a worker
-    if err != nil {
-        log.Print(err)
-    }
-    return list
-}
-
-func main() {
-    worklist := make(chan []string)
-    var pendingSendCount int
-    pendingSendCount++
-
-    go func(){worklist <- os.Args[1:]}() // process the command line
-
-    seen := make(map[string]bool)
-    for ;pendingSendCount > 0; pendingSendCount-- {
-        urlList := <-worklist
-        for _, curLink := range urlList {
-            if !seen[curLink] {
-                seen[curLink] = true
-                pendingSendCount++
-                go func(link string) {
-                    worklist<- crawl(link)
-                }(curLink)
-            }
-        }
-    }
-
-}
-```
-
-- Here's another way to do it... that does not terminate... (skip)
-```
-package main
-
-import (
-	"fmt"
-	"log"
-	// "os"
-)
-
-func Extract(url string) ([]string, error) {
-	return nil, nil
-}
-
-func programArgs() []string {
-	// return os.Args[1:]
-	return []string{"foo.bar/wookie"}
-}
-
-func crawl(url string) []string {
-	fmt.Printf("* Crawling URL: %s\n", url)
-	list, err := Extract(url)
-	if err != nil {
-		log.Printf("Error: %s", err)
-	}
-	return list
-}
-
-func main() {
-	worklist := make(chan []string) // channel of lists of urls to process. may have duplicates
-	unseenLinks := make(chan string) // channel of de-duped urls
-
-
-	go func() {worklist <- programArgs()}()
-
-	for i:=0; i < 20; i++ {
-		// each of these makes a crawler. 20 run concurrently
-		go func() {
-			for link := range unseenLinks { // We will block here until there's something to take off of the channel
-				// and we keep looping until something closes unseenLinks or main exits
-				foundLinks := crawl(link)
-				go func() {worklist <- foundLinks}()
-			}
-		}()
-	}
-
-	seen := make(map[string]bool)
-	for list := range worklist {
-		for _, curLink := range list {
-			if !seen[curLink] {
-				seen[curLink] = true
-				unseenLinks <- curLink
-			}
-		}
-	}
-}
-```
-
-This one terminates when crawling is complete [gist is here](https://gist.github.com/tdarci/89716fbe3947c916b723d3cca6977881):
+Web Crawler. Terminates when crawling is complete [gist is here](https://gist.github.com/tdarci/89716fbe3947c916b723d3cca6977881):
 ```go
 // implements web crawler from chapter 8 of The Go Programming Language, with termination
 // This code is written to run on https://play.golang.org/
