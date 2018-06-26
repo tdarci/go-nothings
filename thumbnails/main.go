@@ -26,6 +26,8 @@ func init() {
 	rand.Seed(time.Now().UnixNano())
 }
 
+// spewOutFiles is a helper function that returns a channel immediately.
+// this channel is populated over time with photoCount files
 func spewOutFiles() <-chan funFile {
 	c := make(chan funFile)
 	go func() {
@@ -43,16 +45,19 @@ func spewOutFiles() <-chan funFile {
 	return c
 }
 
+// makeAThumbnail is function that acts as a stand-in for the process of creating a thumbnail of a file
 func makeAThumbnail(f funFile) (funFile, error) {
 	time.Sleep(time.Millisecond * time.Duration(rand.Int63n(1000)+1))
 	f.Size = f.Size / 2
 	return f, nil
 }
 
+// generateThumbnails takes an inbound channel of files, generates a thumbnail for each one, and returns the cumulative size
+// of all the files once the channel is closed
 func generateThumbnails(filenames <-chan funFile) int64 {
 	sizes := make(chan int64)
-	var wg sync.WaitGroup // number of working goroutines
-	wg.Add(1)             // want to stay open so long as filenames is open. correct? I think so...
+	var wg sync.WaitGroup
+	wg.Add(1)
 	go func() {
 		for f := range filenames {
 			wg.Add(1)
