@@ -28,19 +28,6 @@ however, this can get tricky when we want to _coordinate_ between these differen
 ##### form 2: shared memory multithreading
 - chapter 9
 
-
-```
-
-
-
-
-====================================================================================
-
-
-
-
-```
-
 #### goroutines
 - a goroutine is a process
 - goroutine #1: the main goroutine
@@ -51,18 +38,6 @@ however, this can get tricky when we want to _coordinate_ between these differen
 - lightweight. not threads, though they function the same. do a lot of sleeping and waking
 - example: [spinner](https://github.com/adonovan/gopl.io/blob/master/ch8/spinner/main.go)
     - how many goroutines?
-
-```
-
-
-
-
-====================================================================================
-
-
-
-
-```
 
 #### channels
 - channels connect goroutines. short for "communication channel"
@@ -87,18 +62,6 @@ however, this can get tricky when we want to _coordinate_ between these differen
     - buffered channels do not block on send until the buffer is filled up
     - make a buffered one: `funChannel := make(chan int, 3)`
     - more on using these later...
-
-```
-
-
-
-
-====================================================================================
-
-
-
-
-```
 
 #### channels as pipelines
 [the famous pipelines blog post](https://blog.golang.org/pipelines)
@@ -143,17 +106,6 @@ func main() {
         fmt.Println(s)
     }
 }
-
-```
-```
-
-
-
-
-====================================================================================
-
-
-
 
 ```
 
@@ -204,17 +156,6 @@ func main() {
 
 ```
 
-```
-
-
-
-
-====================================================================================
-
-
-
-
-```
 #### pipeline + buffered channels...
 
 we have this...
@@ -234,17 +175,6 @@ the cake example... BAKER --> ICER --> INSCRIBER
 - example lets you play with channel buffer size and number of workers
 - [book code](https://github.com/adonovan/gopl.io/blob/master/ch8/cake/cake.go) (not now)
 
-```
-
-
-
-
-====================================================================================
-
-
-
-
-```
 #### looping in parallel
 We want to do the same thing to a bunch of files or whatever. "Concurrency (composition of independently-executing processes) is not parallelism (simultaneous execution of computations, often related)"
 
@@ -284,29 +214,83 @@ func makeThumbnails5(filenames []string) (thumbfiles []string, err error) {
 ```
 
 
-**makeThumbnails6** makes thumbnails for each file received from the channel & returns the number of bytes occupied by the files it creates.
+This example makes thumbnails for each file received from the channel & returns the number of bytes occupied by the files it creates. It is dummied up to run without external dependencies... just run the main.
 
 It demonstrates the use of a `WaitGroup`
 ```go
-func makeThumbnails6(filenames <-chan string) int64 {
+package main
+
+import (
+	"fmt"
+	"log"
+	"math/rand"
+	"sync"
+	"time"
+)
+
+const photoCount = 22
+
+func main() {
+	c := spewOutFiles()
+	size := generateThumbnails(c)
+	fmt.Printf("THIS IS THE SIZE ----> %d <------\n", size)
+
+}
+
+type funFile struct {
+	Name string
+	Size int64
+}
+
+func init() {
+	rand.Seed(time.Now().UnixNano())
+}
+
+func spewOutFiles() <-chan funFile {
+	c := make(chan funFile)
+	go func() {
+		for i := 0; i < photoCount; i++ {
+			time.Sleep(time.Millisecond * time.Duration(rand.Int63n(100)+1))
+			ff := funFile{
+				Name: fmt.Sprintf("photo_%02d.jpg", i),
+				Size: rand.Int63n(1000) + 1,
+			}
+			log.Printf("%s: SPEWED", ff.Name)
+			c <- ff
+		}
+		close(c)
+	}()
+	return c
+}
+
+func makeAThumbnail(f funFile) (funFile, error) {
+	time.Sleep(time.Millisecond * time.Duration(rand.Int63n(1000)+1))
+	f.Size = f.Size / 2
+	return f, nil
+}
+
+func generateThumbnails(filenames <-chan funFile) int64 {
 	sizes := make(chan int64)
 	var wg sync.WaitGroup // number of working goroutines
-	wg.Add(1) // want to stay open so long as filenames is open. correct? I think so...
-	for f := range filenames {
-		wg.Add(1)
-		// worker
-		go func(f string) {
-			defer wg.Done()
-			thumb, err := thumbnail.ImageFile(f)
-			if err != nil {
-				log.Println(err)
-				return
-			}
-			info, _ := os.Stat(thumb) // OK to ignore error
-			sizes <- info.Size()
-		}(f)
-	}
-	wg.Done() // filenames is now closed
+	wg.Add(1)             // want to stay open so long as filenames is open. correct? I think so...
+	go func() {
+		for f := range filenames {
+			wg.Add(1)
+			// worker
+			go func(infile funFile) {
+				defer wg.Done()
+				log.Printf("%s: PROCESSING", infile.Name)
+				thumb, err := makeAThumbnail(infile)
+				log.Printf("%s: PROCESSED", thumb.Name)
+				if err != nil {
+					log.Println(err)
+					return
+				}
+				sizes <- thumb.Size
+			}(f)
+		}
+		wg.Done() // filenames is now closed
+	}()
 
 	// closer
 	go func() {
@@ -323,17 +307,6 @@ func makeThumbnails6(filenames <-chan string) int64 {
 
 ```
 
-```
-
-
-
-
-====================================================================================
-
-
-
-
-```
 #### select
 - The `select` statement lets us wait on multiple channels (reads &/or writes) and act as soon as one of them is ready. If multiple are ready at the same time, selection is random.
 
@@ -348,18 +321,6 @@ select {
     default:
         // if nobody is ready when we arrive at this select, do this instead of blocking...
 }
-```
-
-```
-
-
-
-
-====================================================================================
-
-
-
-
 ```
 
 #### web crawler example
