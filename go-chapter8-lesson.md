@@ -178,42 +178,6 @@ the cake example... BAKER --> ICER --> INSCRIBER
 #### looping in parallel
 We want to do the same thing to a bunch of files or whatever. "Concurrency (composition of independently-executing processes) is not parallelism (simultaneous execution of computations, often related)"
 
-[looping in parallel example](https://github.com/adonovan/gopl.io/tree/master/ch8/thumbnail)
-
-**makeThumbnails5** makes thumbnails for the specified files in parallel & returns the generated file names in an arbitrary order, or an error if any step failed.
-
-**skip this one**
-
-```go
-func makeThumbnails5(filenames []string) (thumbfiles []string, err error) {
-	type thumbResult struct {
-		thumbfile string
-		err       error
-	}
-
-	ch := make(chan thumbResult, len(filenames))
-	for _, f := range filenames {
-		go func(f string) {
-			var item thumbResult
-			item.thumbfile, item.err = thumbnail.ImageFile(f) // generate a thumbnail
-			ch <- it // stick our result onto our channel
-		}(f)
-	}
-
-	for range filenames { // very odd loop... no variable... works because we know how many files we received
-		it := <-ch
-		if it.err != nil {
-			return nil, it.err
-		}
-		thumbfiles = append(thumbfiles, it.thumbfile)
-	}
-
-	return thumbfiles, nil
-}
-
-```
-
-
 This example makes thumbnails for each file received from the channel & returns the number of bytes occupied by the files it creates. It is dummied up to run without external dependencies... just run the main.
 
 It demonstrates the use of a `WaitGroup`
