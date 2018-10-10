@@ -40,13 +40,17 @@ func init() {
 func main() {
 	//crawlConcurrently()
 	startURL := programArgs()[0]
-	urls := crawlBreadthwise(startURL, 10)
+	printURLMap("Breadth-wise Search", startURL, crawlBreadthwise(startURL, 10))
+	printURLMap("Depth-wise Search", startURL, crawlDepthwise(startURL, 10))
+}
 
+func printURLMap(message string, startURL string, urls map[string]int) {
+	fmt.Printf("\n== %s ==\n", message)
 	fmt.Printf("\nFound urls, starting from %s...\n", startURL)
 	for key, value := range urls {
 		fmt.Printf(" * %s --> %d\n", key, value)
 	}
-	fmt.Println("\n")
+	fmt.Println("")
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -63,6 +67,11 @@ func programArgs() []string {
 // in the real world, extract() would scan the provided url for links.
 func extract(url string) (foundUrls []string) {
 
+	if f, found := extractMap[url]; found {
+		foundUrls = f
+		return
+	}
+
 	lowVal := rand.Int31n(int32(len(urls)))
 	interval := int32(len(urls)-1) - lowVal
 	// log.Printf("low: %d. interval: %d", lowVal, interval)
@@ -72,12 +81,16 @@ func extract(url string) (foundUrls []string) {
 	}
 
 	foundUrls = urls[lowVal:highVal]
+	extractMap[url] = foundUrls
 	return
 }
+
+var extractMap map[string][]string = make(map[string][]string)
 
 // ---------------------------------------------------------------------------------------------------------------------
 // CRAWLERS
 
+// TODO: make this return a map of urls to counts
 func crawlConcurrently() {
 	// setup channels
 	crawlResults := make(chan []string) // channel of lists of urls to process. may have duplicates
@@ -121,7 +134,7 @@ func crawlConcurrently() {
 				// Print out every time we find one.
 				fmt.Printf("* Found a link: %s\n", curLink)
 				seen[curLink] = true
-				wg.Add(1) // adding item to unseenLinks
+				wg.Add(1)
 				unseenLinks <- curLink
 			}
 		}
@@ -149,4 +162,35 @@ func crawlBreadthwise(url string, maxDepth int) (urlCounts map[string]int) {
 		curDepth++
 	}
 	return
+}
+
+func crawlDepthwise(url string, maxDepth int) (urlCounts map[string]int) {
+	urlCounts = make(map[string]int)
+	scraped := make(map[string]bool)
+
+	crawlDepthwiseGuts(url, 1, maxDepth, scraped, urlCounts)
+
+	return
+}
+
+func crawlDepthwiseGuts(url string, curDepth int, maxDepth int, scraped map[string]bool, urlCounts map[string]int) {
+
+	if curDepth >= maxDepth {
+		// deep enough
+		return
+	}
+
+	if _, found := scraped[url]; found {
+		// already scraped. let's get out
+		return
+	}
+
+	scraped[url] = true
+	curDepth++
+
+	for _, u := range extract(url) {
+		urlCounts[u]++
+		// recurse!
+		crawlDepthwiseGuts(u, curDepth, maxDepth, scraped, urlCounts)
+	}
 }
