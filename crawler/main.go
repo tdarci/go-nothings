@@ -37,6 +37,21 @@ func init() {
 	rand.Seed(randomSeed + time.Now().UnixNano())
 }
 
+func main() {
+	//crawlConcurrently()
+	startURL := programArgs()[0]
+	urls := crawlBreadthwise(startURL, 10)
+
+	fmt.Printf("\nFound urls, starting from %s...\n", startURL)
+	for key, value := range urls {
+		fmt.Printf(" * %s --> %d\n", key, value)
+	}
+	fmt.Println("\n")
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+// HELPER FUNCTIONS
+
 // programArgs() returns the arguments supplied to our program.
 // In this case we are supplying a hard-coded value.
 func programArgs() []string {
@@ -60,7 +75,10 @@ func extract(url string) (foundUrls []string) {
 	return
 }
 
-func main() {
+// ---------------------------------------------------------------------------------------------------------------------
+// CRAWLERS
+
+func crawlConcurrently() {
 	// setup channels
 	crawlResults := make(chan []string) // channel of lists of urls to process. may have duplicates
 	unseenLinks := make(chan string)    // channel of de-duped urls
@@ -109,4 +127,26 @@ func main() {
 		}
 		wg.Done() // item taken off of crawlResults
 	}
+}
+
+func crawlBreadthwise(url string, maxDepth int) (urlCounts map[string]int) {
+	urlCounts = make(map[string]int)
+	scraped := make(map[string]bool)
+	levels := [][]string{{url}}
+	curDepth := 1
+
+	for curDepth <= maxDepth {
+		urls := levels[curDepth-1]
+		var nextLevel []string
+		for _, u := range urls {
+			urlCounts[u]++
+			if _, found := scraped[u]; !found {
+				nextLevel = append(nextLevel, extract(u)...)
+				scraped[u] = true
+			}
+		}
+		levels = append(levels, nextLevel)
+		curDepth++
+	}
+	return
 }
