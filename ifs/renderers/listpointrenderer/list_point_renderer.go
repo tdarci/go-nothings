@@ -21,5 +21,5 @@ func (l *ListPointRenderer) Initialize(cfg renderers.PointRendererConfig) {
 }
 
 func (l *ListPointRenderer) Draw(p shared.Point) {
-	fmt.Printf("* x: %d y: %d\n", p.X, p.Y)
+	fmt.Printf("* x: %5d • y: %5d\n", p.X, p.Y)
 }
