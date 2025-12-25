@@ -8,7 +8,7 @@ require (
 	github.com/ebitengine/purego v0.9.0 // indirect
 	github.com/gdamore/encoding v1.0.1 // indirect
 	github.com/gdamore/tcell/v3 v3.0.4 // indirect
-	github.com/hajimehoshi/ebiten/v2 v2.9.6 // indirect
+	github.com/hajimehoshi/ebiten/v2 v2.9.6
 	github.com/jezek/xgb v1.1.1 // indirect
 	github.com/lucasb-eyer/go-colorful v1.3.0 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect

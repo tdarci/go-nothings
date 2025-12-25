@@ -11,8 +11,7 @@ type ListPointRenderer struct {
 }
 
 func New() *ListPointRenderer {
-	out := &ListPointRenderer{}
-	return out
+	return &ListPointRenderer{}
 }
 
 func (l *ListPointRenderer) Initialize(cfg renderers.PointRendererConfig) {

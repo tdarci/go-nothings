@@ -2,16 +2,11 @@ package sierpinski
 
 import (
 	"math/rand"
-	"time"
 
 	"github.com/tdarci/go-nothings/ifs/shared"
 )
 
 const numVertices = 3
-
-func init() {
-	rand.Seed(time.Now().UnixNano())
-}
 
 type Sierpinski struct {
 	config Config
@@ -69,8 +64,8 @@ func (s *Sierpinski) Next(o shared.Point) shared.Point {
 	v := s.state.Vertices[rand.Intn(3)]
 
 	out := shared.Point{
-		X: (v.X + o.X)/2,
-		Y: (v.Y + o.Y)/2,
+		X: (v.X + o.X) / 2,
+		Y: (v.Y + o.Y) / 2,
 	}
 	return out
 }

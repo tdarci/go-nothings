@@ -1,7 +1,12 @@
 package main
 
-import "github.com/tdarci/go-nothings/ifs/harness"
+import (
+	"runtime"
+
+	"github.com/tdarci/go-nothings/ifs/harness"
+)
 
 func main() {
+	runtime.LockOSThread()
 	harness.RunSierpinski()
 }
