@@ -8,11 +8,13 @@ type PointRendererConfig struct {
 }
 
 type PointRenderer interface {
+	Renderer[shared.Point]
+
 	Initialize(PointRendererConfig)
-	Draw(shared.Point)
 }
 
 type Renderer[T any] interface{
 	Draw(T)
+	Shutdown()
 }
 

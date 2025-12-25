@@ -1,6 +1,7 @@
 package sierpinski
 
 import (
+	"math"
 	"math/rand"
 
 	"github.com/tdarci/go-nothings/ifs/shared"
@@ -20,8 +21,7 @@ func New(cfg Config) *Sierpinski {
 }
 
 type Config struct {
-	MinPoint shared.Point
-	MaxPoint shared.Point
+	ContainerEdgeLength int
 }
 
 type State struct {
@@ -32,14 +32,17 @@ func (s *Sierpinski) Initialize() []shared.Point {
 	// todo: more vertices
 	s.state.Vertices = make([]shared.Point, numVertices)
 	// todo: irregular triangles
-	vA := s.config.MinPoint
-	s.state.Vertices[0] = vA
-	vB := shared.Point{X: s.config.MaxPoint.X, Y: s.config.MinPoint.Y}
-	s.state.Vertices[1] = vB
+	legLen := s.config.ContainerEdgeLength
+	vA := shared.Point{X:0, Y:legLen}
+	vB := shared.Point{X:legLen, Y:legLen}
+	triangleHeight := int(math.Sqrt(math.Pow(float64(legLen), 2)- math.Pow(float64(legLen)/2, 2)))
 	vC := shared.Point{
-		X: (s.config.MinPoint.X + s.config.MaxPoint.X) / 2,
-		Y: s.config.MaxPoint.Y,
+		X: legLen/2,
+		Y: legLen - triangleHeight,
 	}
+
+	s.state.Vertices[0] = vA
+	s.state.Vertices[1] = vB
 	s.state.Vertices[2] = vC
 
 	// get a random point inside
