@@ -47,10 +47,10 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		g.LastDrawn++
 		curPt := g.Points[g.LastDrawn]
 		
-		log.Printf("FOOBAR. [ebitrenderer.Game.Draw] drawing point %v", curPt)
+		log.Printf("FOOBAR. [ebitrenderer.Game.Draw] drawing point %.2f, %.2f", curPt.X, curPt.Y)
 
 		op := &ebiten.DrawImageOptions{}
-		op.GeoM.Translate(float64(curPt.X), float64(curPt.Y))
+		op.GeoM.Translate(curPt.X, curPt.Y)
 		screen.DrawImage(g.Dot, op)
 	}
 }
