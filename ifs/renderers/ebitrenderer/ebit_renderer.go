@@ -43,6 +43,8 @@ func NewGame() *Game {
 func (g *Game) Draw(screen *ebiten.Image) {
 	lastIdx := len(g.Points) - 1
 
+	screenHeight := screen.Bounds().Size().Y
+
 	for g.LastDrawn < lastIdx {
 		g.LastDrawn++
 		curPt := g.Points[g.LastDrawn]
@@ -50,7 +52,8 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		log.Printf("FOOBAR. [ebitrenderer.Game.Draw] drawing point %.2f, %.2f", curPt.X, curPt.Y)
 
 		op := &ebiten.DrawImageOptions{}
-		op.GeoM.Translate(curPt.X, curPt.Y)
+		y := float64(screenHeight) - curPt.Y
+		op.GeoM.Translate(curPt.X, y)
 		screen.DrawImage(g.Dot, op)
 	}
 }
