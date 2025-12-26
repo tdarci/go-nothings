@@ -15,6 +15,8 @@ type PointRenderer interface {
 
 type Renderer[T any] interface{
 	Draw(T)
-	Shutdown()
+	// Run initiates the UX and ends when the user
+	// closes the window.
+	Run()
 }
 

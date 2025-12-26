@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	iterations = 10000
+	iterations = 10_000
 )
 
 func main() {

@@ -1,11 +1,16 @@
 package engine
 
+import (
+	"context"
+	"log"
+)
+
 type Generator[T any] interface {
 	Next(T) T
 	Initialize() []T
 }
 
-func Run[T any](gen Generator[T], iterations int, outChan chan T) {
+func Run[T any](ctx context.Context, gen Generator[T], iterations int, outChan chan T) {
 	var o T
 	startOut := gen.Initialize()
 	for _, o = range startOut {
@@ -14,6 +19,12 @@ func Run[T any](gen Generator[T], iterations int, outChan chan T) {
 
 	for range iterations {
 		o = gen.Next(o)
-		outChan <- o
+		select {
+		case outChan <- o:
+		case <-ctx.Done():
+			log.Println("[engine.Run] responding to closed context")
+			return
+		}
 	}
+	log.Println("[engine.Run] completed all iterations")
 }

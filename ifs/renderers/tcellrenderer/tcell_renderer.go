@@ -81,7 +81,20 @@ func (r *TCellRenderer) Draw(p shared.Point) {
 	r.screen.Show()
 }
 
-func (r *TCellRenderer) Shutdown() {
+func (r *TCellRenderer) Run() {
+	defer r.shutdown()
+
+	ch := r.screen.EventQ()
+	for ev := range ch {
+		switch ev.(type){
+		case *tcell.EventKey:
+			// end when user presses a key
+			return
+		}
+	}
+}
+
+func (r *TCellRenderer) shutdown() {
 	if r.screen != nil {
 		r.screen.Fini()
 	}
