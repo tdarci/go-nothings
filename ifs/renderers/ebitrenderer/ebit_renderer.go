@@ -44,16 +44,18 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	lastIdx := len(g.Points) - 1
 
 	screenHeight := screen.Bounds().Size().Y
+	xOffset := -1.0 * g.min.X
+	yOffset := -1.0 * g.min.Y
 
 	for g.LastDrawn < lastIdx {
 		g.LastDrawn++
 		curPt := g.Points[g.LastDrawn]
-		
-		log.Printf("FOOBAR. [ebitrenderer.Game.Draw] drawing point %.2f, %.2f", curPt.X, curPt.Y)
 
 		op := &ebiten.DrawImageOptions{}
-		y := float64(screenHeight) - curPt.Y
-		op.GeoM.Translate(curPt.X, y)
+		x := curPt.X + xOffset
+		y := float64(screenHeight) - curPt.Y - yOffset
+		log.Printf("FOOBAR. [ebitrenderer.Game.Draw] drawing point %.2f, %.2f on screen at %.2f, %.2f", curPt.X, curPt.Y, x, y)
+		op.GeoM.Translate(x, y)
 		screen.DrawImage(g.Dot, op)
 	}
 }
@@ -79,7 +81,7 @@ func (e *EbitRenderer) Initialize(cfg renderers.PointRendererConfig) {
 
 	ebiten.SetTPS(1) // we do not use the Update function, so set this very low
 	xSize, ySize := ebiten.Monitor().Size()
-	ebiten.SetWindowSize(int(float32(xSize) * .9), int(float32(ySize) * .9))
+	ebiten.SetWindowSize(int(float32(xSize)*.9), int(float32(ySize)*.9))
 	ebiten.SetWindowPosition(0, 0)
 	ebiten.SetScreenClearedEveryFrame(false)
 	ebiten.SetWindowTitle("Fun Times")

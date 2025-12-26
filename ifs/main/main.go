@@ -6,14 +6,20 @@ import (
 	"time"
 
 	"github.com/tdarci/go-nothings/ifs/harness"
+	"github.com/tdarci/go-nothings/ifs/shared"
 )
 
 const (
-	maxIterations = 100_000
-	drawingDelay = time.Millisecond * 2
+	maxIterations    = 100_000
+	drawingDelay     = time.Millisecond * 2
 	containerEdgeLen = 1_000
-	maxFernW = 100
-	maxFernH = 100
+	maxFernW         = 1000
+	maxFernH         = 1000
+)
+
+var (
+	minPt = shared.Point{X: -100.0, Y: -150.0}
+	maxPt = shared.Point{X: 300.0, Y: 400.0}
 )
 
 func main() {
@@ -30,7 +36,9 @@ func main() {
 	log.Printf("Starting IFS processing at %s...", timeStr)
 
 	runtime.LockOSThread()
-	sys := harness.NewSierpinskiSystem(containerEdgeLen)
-	// sys := harness.NewFernSystem(maxFernW, maxFernH)
+	// sys := harness.NewSierpinskiSystem(containerEdgeLen)
+	// sys := harness.NewNegTestSystem(minPt, maxPt)
+	sys := harness.NewFernSystem(maxFernW, maxFernH)
+
 	harness.Run(sys, maxIterations, drawingDelay)
 }

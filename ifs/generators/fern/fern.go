@@ -57,8 +57,5 @@ func (f *Fern) Next(o shared.Point) shared.Point {
 		newY = f.config.MaxHeight
 	}
 
-	if newX < 0 {
-		newX = 0
-	}
 	return shared.Point{X: newX, Y: newY}
 }

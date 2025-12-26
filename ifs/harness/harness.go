@@ -8,6 +8,7 @@ import (
 
 	"github.com/tdarci/go-nothings/ifs/engine"
 	"github.com/tdarci/go-nothings/ifs/generators/fern"
+	"github.com/tdarci/go-nothings/ifs/generators/negtest"
 	"github.com/tdarci/go-nothings/ifs/generators/sierpinski"
 	"github.com/tdarci/go-nothings/ifs/renderers"
 	"github.com/tdarci/go-nothings/ifs/renderers/ebitrenderer"
@@ -81,13 +82,34 @@ func NewSierpinskiSystem(containerEdgeLen float64) *System[shared.Point] {
 
 func NewFernSystem(maxWidth float64, maxHeight float64) *System[shared.Point] {
 	cfg := fern.Config{
-		MaxWidth: maxWidth,
+		MaxWidth:  maxWidth,
 		MaxHeight: maxHeight,
 	}
 	gen := fern.New(cfg)
 	rendCfg := renderers.PointRendererConfig{
-		MinPoint: shared.Point{X: 0, Y: 0},
-		MaxPoint: shared.Point{X: cfg.MaxWidth, Y: cfg.MaxHeight},
+		MinPoint: shared.Point{X: -1 * cfg.MaxWidth/2, Y: 0},
+		MaxPoint: shared.Point{X: cfg.MaxWidth/2, Y: cfg.MaxHeight},
+	}
+	var pr renderers.PointRenderer
+	pr = ebitrenderer.New()
+	pr.Initialize(rendCfg)
+
+	out := &System[shared.Point]{
+		Generator: gen,
+		Renderer:  pr,
+	}
+	return out
+}
+
+func NewNegTestSystem(minPt shared.Point, maxPt shared.Point) *System[shared.Point] {
+	cfg := negtest.Config{
+		MaxPoint: maxPt,
+		MinPoint: minPt,
+	}
+	gen := negtest.New(cfg)
+	rendCfg := renderers.PointRendererConfig{
+		MinPoint: minPt,
+		MaxPoint: maxPt,
 	}
 	var pr renderers.PointRenderer
 	pr = ebitrenderer.New()
