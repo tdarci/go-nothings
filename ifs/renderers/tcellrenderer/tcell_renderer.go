@@ -47,7 +47,10 @@ func (r *TCellRenderer) Draw(p shared.Point) {
 		return
 	}
 
-	screenW, screenH := r.screen.Size()
+	origScreenW, origScreenH := r.screen.Size()
+	origScreenH = origScreenH * 2 // we only get to use half the height
+	screenW := origScreenW
+	screenH := origScreenH
 	logW := r.max.X - r.min.X
 	logH := r.max.Y - r.min.Y
 	logAspect := float32(logW) / float32(logH)
@@ -66,8 +69,8 @@ func (r *TCellRenderer) Draw(p shared.Point) {
 		screenH = int(float32(screenH) * logAspect / screenAspect)
 	}
 
-	x := (p.X - r.min.X) * screenW / logW
-	y := (p.Y - r.min.Y) * screenH / logH / 2 // we divide by 2 because our "pixels" are characters, which are rougly 2:1 h:w
+	x := ((p.X - r.min.X) * screenW / logW) + ((origScreenW - screenW)/2)
+	y := (((p.Y - r.min.Y) * screenH / logH) + ((origScreenH - screenH)/2)) / 2 // we divide by 2 because our "pixels" are characters, which are rougly 2:1 h:w
 
 	if x < 0 || y < 0 {
 		return
