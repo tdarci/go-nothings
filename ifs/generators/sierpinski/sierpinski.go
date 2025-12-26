@@ -21,7 +21,7 @@ func New(cfg Config) *Sierpinski {
 }
 
 type Config struct {
-	ContainerEdgeLength int
+	ContainerEdgeLength float64
 }
 
 type State struct {
@@ -33,11 +33,11 @@ func (s *Sierpinski) Initialize() []shared.Point {
 	s.state.Vertices = make([]shared.Point, numVertices)
 	// todo: irregular triangles
 	legLen := s.config.ContainerEdgeLength
-	vA := shared.Point{X:0, Y:legLen}
-	vB := shared.Point{X:legLen, Y:legLen}
-	triangleHeight := int(math.Sqrt(math.Pow(float64(legLen), 2)- math.Pow(float64(legLen)/2, 2)))
+	vA := shared.Point{X: 0, Y: legLen}
+	vB := shared.Point{X: legLen, Y: legLen}
+	triangleHeight := math.Sqrt(math.Pow(legLen, 2) - math.Pow(legLen/2, 2))
 	vC := shared.Point{
-		X: legLen/2,
+		X: legLen / 2,
 		Y: legLen - triangleHeight,
 	}
 
@@ -54,8 +54,8 @@ func (s *Sierpinski) Initialize() []shared.Point {
 	}
 
 	initialDot := shared.Point{
-		X: vA.X + int(r1*float64(vB.X-vA.X)) + int(r2*float64(vC.X-vA.X)),
-		Y: vA.Y + int(r1*float64(vB.Y-vA.Y)) + int(r2*float64(vC.Y-vA.Y)),
+		X: vA.X + r1*(vB.X-vA.X) + r2*(vC.X-vA.X),
+		Y: vA.Y + r1*(vB.Y-vA.Y) + r2*(vC.Y-vA.Y),
 	}
 
 	out := append(s.state.Vertices, initialDot)

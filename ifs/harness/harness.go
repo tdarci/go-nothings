@@ -7,12 +7,13 @@ import (
 	"time"
 
 	"github.com/tdarci/go-nothings/ifs/engine"
+	"github.com/tdarci/go-nothings/ifs/generators/fern"
 	"github.com/tdarci/go-nothings/ifs/generators/sierpinski"
 	"github.com/tdarci/go-nothings/ifs/renderers"
+	"github.com/tdarci/go-nothings/ifs/renderers/ebitrenderer"
 
-	// "github.com/tdarci/go-nothings/ifs/renderers/ebitrenderer"
 	// "github.com/tdarci/go-nothings/ifs/renderers/listpointrenderer"
-	"github.com/tdarci/go-nothings/ifs/renderers/tcellrenderer"
+	// "github.com/tdarci/go-nothings/ifs/renderers/tcellrenderer"
 	"github.com/tdarci/go-nothings/ifs/shared"
 )
 
@@ -21,17 +22,13 @@ type System[T any] struct {
 	Renderer  renderers.Renderer[T]
 }
 
-func RunSierpinski(iterations int) {
-	Run(NewSierpinskiSystem(), iterations)
-}
-
-func Run[T any](sys *System[T], iterations int) {
+func Run[T any](sys *System[T], maxIterations int, drawingDelay time.Duration) {
 	var wg sync.WaitGroup
 	genChan := make(chan T, 50)
 	ctx, canceFn := context.WithCancel(context.Background())
 
 	wg.Go(func() {
-		tckr := time.NewTicker(time.Millisecond * 10)
+		tckr := time.NewTicker(drawingDelay)
 		defer tckr.Stop()
 		for val := range genChan {
 			select {
@@ -47,7 +44,7 @@ func Run[T any](sys *System[T], iterations int) {
 
 	wg.Go(func() {
 		log.Println("[harness.Run] starting engine")
-		engine.Run(ctx, sys.Generator, iterations, genChan)
+		engine.Run(ctx, sys.Generator, maxIterations, genChan)
 		log.Println("[harness.Run] engine run complete")
 		close(genChan)
 	})
@@ -60,9 +57,9 @@ func Run[T any](sys *System[T], iterations int) {
 	log.Println("Done.")
 }
 
-func NewSierpinskiSystem() *System[shared.Point] {
+func NewSierpinskiSystem(containerEdgeLen float64) *System[shared.Point] {
 	cfg := sierpinski.Config{
-		ContainerEdgeLength: 200,
+		ContainerEdgeLength: containerEdgeLen,
 	}
 	gen := sierpinski.New(cfg)
 	rendCfg := renderers.PointRendererConfig{
@@ -71,8 +68,29 @@ func NewSierpinskiSystem() *System[shared.Point] {
 	}
 	var pr renderers.PointRenderer
 	// pr = listpointrenderer.New()
-	// pr = ebitrenderer.New()
-	pr = tcellrenderer.New()
+	pr = ebitrenderer.New()
+	// pr = tcellrenderer.New()
+	pr.Initialize(rendCfg)
+
+	out := &System[shared.Point]{
+		Generator: gen,
+		Renderer:  pr,
+	}
+	return out
+}
+
+func NewFernSystem(maxWidth float64, maxHeight float64) *System[shared.Point] {
+	cfg := fern.Config{
+		MaxWidth: maxWidth,
+		MaxHeight: maxHeight,
+	}
+	gen := fern.New(cfg)
+	rendCfg := renderers.PointRendererConfig{
+		MinPoint: shared.Point{X: 0, Y: 0},
+		MaxPoint: shared.Point{X: cfg.MaxWidth, Y: cfg.MaxHeight},
+	}
+	var pr renderers.PointRenderer
+	pr = ebitrenderer.New()
 	pr.Initialize(rendCfg)
 
 	out := &System[shared.Point]{

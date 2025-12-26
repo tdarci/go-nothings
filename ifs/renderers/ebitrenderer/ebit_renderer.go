@@ -24,6 +24,8 @@ type Game struct {
 	Points    []shared.Point
 	Dot       *ebiten.Image
 	LastDrawn int // Index into Points slice of last-drawn point
+	min       shared.Point
+	max       shared.Point
 }
 
 func NewGame() *Game {
@@ -39,25 +41,25 @@ func NewGame() *Game {
 // Draw is called when the screen refreshes. It is meant for
 // rendering only, with no update of game state.
 func (g *Game) Draw(screen *ebiten.Image) {
-	log.Println("FOOBAR")
 	lastIdx := len(g.Points) - 1
-	h := screen.Bounds().Dy()
-	log.Printf("FOOBAR Draw lastidx: %d. lastdrawn: %d", lastIdx, g.LastDrawn)
+
 	for g.LastDrawn < lastIdx {
 		g.LastDrawn++
 		curPt := g.Points[g.LastDrawn]
-		log.Printf("FOOBAR. drawing point %v", curPt)
-		screenX := curPt.X
-		screenY := h - 1 - curPt.Y
+		
+		log.Printf("FOOBAR. [ebitrenderer.Game.Draw] drawing point %v", curPt)
+
 		op := &ebiten.DrawImageOptions{}
-		op.GeoM.Translate(float64(screenX), float64(screenY))
-		// screen.DrawImage(g.Dot, op)
+		op.GeoM.Translate(float64(curPt.X), float64(curPt.Y))
+		screen.DrawImage(g.Dot, op)
 	}
 }
 
 // Layout sets the logical size of the screen
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
-	return outsideWidth, outsideHeight
+	w := int(g.max.X - g.min.X)
+	h := int(g.max.Y - g.min.Y)
+	return w, h
 }
 
 // Update updates internal game state.
@@ -69,28 +71,26 @@ func (g *Game) Update() error {
 }
 
 func (e *EbitRenderer) Initialize(cfg renderers.PointRendererConfig) {
+	e.Game.min = cfg.MinPoint
+	e.Game.max = cfg.MaxPoint
+
 	ebiten.SetTPS(1) // we do not use the Update function, so set this very low
-	xSize := cfg.MaxPoint.X - cfg.MinPoint.X
-	ySize := cfg.MaxPoint.Y - cfg.MinPoint.Y
-	ebiten.SetWindowSize(xSize, ySize)
+	xSize, ySize := ebiten.Monitor().Size()
+	ebiten.SetWindowSize(int(float32(xSize) * .9), int(float32(ySize) * .9))
+	ebiten.SetWindowPosition(0, 0)
+	ebiten.SetScreenClearedEveryFrame(false)
 	ebiten.SetWindowTitle("Fun Times")
-	go func() {
-		// THIS DOES NOT WORK. ebitengine requires the main thread to do
-		// its operations. But if we run RunGame in the main thread, it takes
-		// over our program execution. : (
-		// In order to use any GUI kind of renderer, will need to rework how
-		// the IFS engine interacts with the renderer, since they all want some
-		// sort of a loop on the main thread.
-		if err := ebiten.RunGame(e.Game); err != nil {
-			log.Fatalf("Error running game: %s", err)
-		}
-	}()
 }
 
 // Our Draw function that is called by our IFS framework is essentially the way we
 // know there is something to render. We use it here to mutate the state of our
 // Game object.
 func (e *EbitRenderer) Draw(p shared.Point) {
-	log.Printf("FOOBAR ebitrenderer draw %v", p)
 	e.Game.Points = append(e.Game.Points, p)
+}
+
+func (e *EbitRenderer) Run() {
+	if err := ebiten.RunGame(e.Game); err != nil {
+		log.Fatalf("Error running game: %s", err)
+	}
 }

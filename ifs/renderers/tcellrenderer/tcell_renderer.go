@@ -56,12 +56,6 @@ func (r *TCellRenderer) Draw(p shared.Point) {
 	logAspect := float32(logW) / float32(logH)
 	screenAspect := float32(screenW) / float32(screenH)
 
-	// log.Printf("FOOBAR [tcellrenderer.Draw] screenW: %d. screenH: %d. logW: %d. logH: %d. screenA: %f. logA: %f",
-	// 	screenW, screenH,
-	// 	logW, logH,
-	// 	screenAspect, logAspect,
-	// )
-
 	switch {
 	case screenAspect > logAspect:
 		screenW = int(float32(screenW) * logAspect / screenAspect)
