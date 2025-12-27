@@ -1,0 +1,15 @@
+MaxIterations: 10
+DrawingDelayMs: 
+Triangle:
+  EdgeLen: 1000.0
+Fern:
+  MaxWidth: 800.0
+  MaxHeight: 600.0
+Rectangle:
+  MinPoint:
+    X: -200
+    Y: -300
+  MaxPoint:
+    X: 300
+    Y: 100
+  

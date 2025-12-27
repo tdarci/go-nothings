@@ -54,7 +54,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		op := &ebiten.DrawImageOptions{}
 		x := curPt.X + xOffset
 		y := float64(screenHeight) - curPt.Y - yOffset
-		log.Printf("FOOBAR. [ebitrenderer.Game.Draw] drawing point %.2f, %.2f on screen at %.2f, %.2f", curPt.X, curPt.Y, x, y)
+		// log.Printf("FOOBAR. [ebitrenderer.Game.Draw] drawing point %.2f, %.2f on screen at %.2f, %.2f", curPt.X, curPt.Y, x, y)
 		op.GeoM.Translate(x, y)
 		screen.DrawImage(g.Dot, op)
 	}
