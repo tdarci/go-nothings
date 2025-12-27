@@ -1,4 +1,4 @@
-MaxIterations: 1000
+MaxIterations: 100_000
 DrawingDelayMs: 
 Triangle:
   EdgeLen: 1000.0
