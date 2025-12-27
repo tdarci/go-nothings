@@ -63,8 +63,8 @@ func (r *TCellRenderer) Draw(p shared.Point) {
 		screenH = int(float32(screenH) * logAspect / screenAspect)
 	}
 
-	x := ((p.X - r.min.X) * screenW / logW) + ((origScreenW - screenW)/2)
-	y := (((p.Y - r.min.Y) * screenH / logH) + ((origScreenH - screenH)/2)) / 2 // we divide by 2 because our "pixels" are characters, which are rougly 2:1 h:w
+	x := int(((p.X - r.min.X) * float64(screenW) / logW) + (float64(origScreenW - screenW)/2))
+	y := int(((p.Y - r.min.Y) * float64(screenH) / logH) + (float64(origScreenH - screenH)/2) / 2) // we divide by 2 because our "pixels" are characters, which are rougly 2:1 h:w
 
 	if x < 0 || y < 0 {
 		return

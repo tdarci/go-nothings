@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"log"
+	"os"
 	"runtime"
 	"time"
 
@@ -24,6 +26,19 @@ var (
 
 func main() {
 
+	usage := func() {
+		fmt.Println("")
+		fmt.Println("")
+		fmt.Println("=====================================")
+		fmt.Println("Usage:")
+		fmt.Println(" ifs triangle|fern|rectangle")
+	}
+
+	if len(os.Args) < 3 {
+		usage()
+		return
+	}
+
 	st := time.Now()
 	timeStr := st.Format("2006-01-02_15-04-05")
 	// filename := "ifs.log"
@@ -33,12 +48,25 @@ func main() {
 	// 	log.Fatalf("unable to create file %q: %s", filename, err)
 	// }
 	// log.SetOutput(f)
-	log.Printf("Starting IFS processing at %s...", timeStr)
+
+	var sys *harness.System[shared.Point]
+
+	fractal := os.Args[2]
+	switch fractal {
+	case "triangle":
+		sys = harness.NewSierpinskiSystem(containerEdgeLen)
+	case "fern":
+		sys = harness.NewFernSystem(maxFernW, maxFernH)
+	case "rectangle":
+		sys = harness.NewNegTestSystem(minPt, maxPt)
+	default:
+		usage()
+		return
+	}
+
+	log.Printf("Starting IFS processing of %s at %s...", fractal, timeStr)
 
 	runtime.LockOSThread()
-	// sys := harness.NewSierpinskiSystem(containerEdgeLen)
-	// sys := harness.NewNegTestSystem(minPt, maxPt)
-	sys := harness.NewFernSystem(maxFernW, maxFernH)
 
 	harness.Run(sys, maxIterations, drawingDelay)
 }
