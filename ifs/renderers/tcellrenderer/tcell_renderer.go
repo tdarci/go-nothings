@@ -48,7 +48,7 @@ func (r *TCellRenderer) Draw(p shared.Point) {
 	}
 
 	origScreenW, origScreenH := r.screen.Size()
-	origScreenH = origScreenH * 2 // we only get to use half the height
+	origScreenH = origScreenH * 2 // each vertical "pixel" counts for 2
 	screenW := origScreenW
 	screenH := origScreenH
 	logW := r.max.X - r.min.X

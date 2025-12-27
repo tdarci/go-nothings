@@ -12,7 +12,9 @@ import (
 	"github.com/tdarci/go-nothings/ifs/generators/negtest"
 	"github.com/tdarci/go-nothings/ifs/generators/sierpinski"
 	"github.com/tdarci/go-nothings/ifs/renderers"
+	listpointrenderer "github.com/tdarci/go-nothings/ifs/renderers/ListPointRenderer"
 	"github.com/tdarci/go-nothings/ifs/renderers/ebitrenderer"
+	"github.com/tdarci/go-nothings/ifs/renderers/tcellrenderer"
 
 	// "github.com/tdarci/go-nothings/ifs/renderers/listpointrenderer"
 	// "github.com/tdarci/go-nothings/ifs/renderers/tcellrenderer"
@@ -66,9 +68,14 @@ func NewSierpinskiSystem(cfg config.TriangleConfig) *System[shared.Point] {
 		MaxPoint: shared.Point{X: cfg.EdgeLen, Y: cfg.EdgeLen},
 	}
 	var pr renderers.PointRenderer
-	// pr = listpointrenderer.New()
-	pr = ebitrenderer.New()
-	// pr = tcellrenderer.New()
+	switch cfg.Renderer {
+	case "tcell":
+		pr = tcellrenderer.New()
+	case "list":
+		pr = listpointrenderer.New()
+	default:
+		pr = ebitrenderer.New()
+	}
 	pr.Initialize(rendCfg)
 
 	out := &System[shared.Point]{

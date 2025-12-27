@@ -48,13 +48,12 @@ func main() {
 
 	st := time.Now()
 	timeStr := st.Format("2006-01-02_15-04-05")
-	// filename := "ifs.log"
-	// filename := timeStr + "-ifs.log"
-	// f, err := os.Create(filename)
-	// if err != nil {
-	// 	log.Fatalf("unable to create file %q: %s", filename, err)
-	// }
-	// log.SetOutput(f)
+	filename := "ifs.log"
+	f, err := os.Create(filename)
+	if err != nil {
+		log.Fatalf("unable to create file %q: %s", filename, err)
+	}
+	log.SetOutput(f)
 
 	var configFileName string
 	var cfg config.Config = defaultConfig

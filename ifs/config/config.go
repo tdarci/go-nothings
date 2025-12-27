@@ -12,6 +12,7 @@ type Config struct {
 
 type TriangleConfig struct {
 	EdgeLen float64 `yaml:"EdgeLen"`
+	Renderer string `yaml:"Renderer"`
 }
 
 type FernConfig struct {
