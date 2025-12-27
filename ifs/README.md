@@ -11,6 +11,6 @@ All fractal generators can be found in directories below the `generators` direct
 Each generator is wired up to its renderer in `harness.go`.
 
 ## To Do
-- [] Choose fractal to run via command-line argument.
-- [] Configure via a JSON or YAML config file.
+- [x] Choose fractal to run via command-line argument.
+- [x] Configure via YAML config file.
 - [] Add more configuration to each type of fractal.

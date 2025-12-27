@@ -4,24 +4,21 @@ import (
 	"math"
 	"math/rand"
 
+	"github.com/tdarci/go-nothings/ifs/config"
 	"github.com/tdarci/go-nothings/ifs/shared"
 )
 
 const numVertices = 3
 
 type Sierpinski struct {
-	config Config
+	config config.TriangleConfig
 	state  State
 }
 
-func New(cfg Config) *Sierpinski {
+func New(cfg config.TriangleConfig) *Sierpinski {
 	return &Sierpinski{
 		config: cfg,
 	}
-}
-
-type Config struct {
-	ContainerEdgeLength float64
 }
 
 type State struct {
@@ -32,7 +29,7 @@ func (s *Sierpinski) Initialize() []shared.Point {
 	// todo: more vertices
 	s.state.Vertices = make([]shared.Point, numVertices)
 	// todo: irregular triangles
-	legLen := s.config.ContainerEdgeLength
+	legLen := s.config.EdgeLen
 	vA := shared.Point{X: 0, Y: legLen}
 	vB := shared.Point{X: legLen, Y: legLen}
 	triangleHeight := math.Sqrt(math.Pow(legLen, 2) - math.Pow(legLen/2, 2))

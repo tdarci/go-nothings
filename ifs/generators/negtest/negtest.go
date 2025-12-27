@@ -3,13 +3,9 @@ package negtest
 import (
 	"math/rand/v2"
 
+	"github.com/tdarci/go-nothings/ifs/config"
 	"github.com/tdarci/go-nothings/ifs/shared"
 )
-
-type Config struct {
-	MinPoint shared.Point
-	MaxPoint shared.Point
-}
 
 const (
 	edgeLeft   = 0
@@ -19,7 +15,7 @@ const (
 )
 
 type NegTest struct {
-	config  Config
+	config  config.RectangleConfig
 	left    float64
 	right   float64
 	top     float64
@@ -29,7 +25,7 @@ type NegTest struct {
 	curEdge int
 }
 
-func New(cfg Config) *NegTest {
+func New(cfg config.RectangleConfig) *NegTest {
 
 	out := &NegTest{
 		config: cfg,

@@ -6,6 +6,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/tdarci/go-nothings/ifs/config"
 	"github.com/tdarci/go-nothings/ifs/engine"
 	"github.com/tdarci/go-nothings/ifs/generators/fern"
 	"github.com/tdarci/go-nothings/ifs/generators/negtest"
@@ -58,14 +59,11 @@ func Run[T any](sys *System[T], maxIterations int, drawingDelay time.Duration) {
 	log.Println("Done.")
 }
 
-func NewSierpinskiSystem(containerEdgeLen float64) *System[shared.Point] {
-	cfg := sierpinski.Config{
-		ContainerEdgeLength: containerEdgeLen,
-	}
+func NewSierpinskiSystem(cfg config.TriangleConfig) *System[shared.Point] {
 	gen := sierpinski.New(cfg)
 	rendCfg := renderers.PointRendererConfig{
 		MinPoint: shared.Point{X: 0, Y: 0},
-		MaxPoint: shared.Point{X: cfg.ContainerEdgeLength, Y: cfg.ContainerEdgeLength},
+		MaxPoint: shared.Point{X: cfg.EdgeLen, Y: cfg.EdgeLen},
 	}
 	var pr renderers.PointRenderer
 	// pr = listpointrenderer.New()
@@ -80,15 +78,11 @@ func NewSierpinskiSystem(containerEdgeLen float64) *System[shared.Point] {
 	return out
 }
 
-func NewFernSystem(maxWidth float64, maxHeight float64) *System[shared.Point] {
-	cfg := fern.Config{
-		MaxWidth:  maxWidth,
-		MaxHeight: maxHeight,
-	}
+func NewFernSystem(cfg config.FernConfig) *System[shared.Point] {
 	gen := fern.New(cfg)
 	rendCfg := renderers.PointRendererConfig{
-		MinPoint: shared.Point{X: -1 * cfg.MaxWidth/2, Y: 0},
-		MaxPoint: shared.Point{X: cfg.MaxWidth/2, Y: cfg.MaxHeight},
+		MinPoint: shared.Point{X: -1 * cfg.MaxWidth / 2, Y: 0},
+		MaxPoint: shared.Point{X: cfg.MaxWidth / 2, Y: cfg.MaxHeight},
 	}
 	var pr renderers.PointRenderer
 	pr = ebitrenderer.New()
@@ -101,15 +95,11 @@ func NewFernSystem(maxWidth float64, maxHeight float64) *System[shared.Point] {
 	return out
 }
 
-func NewNegTestSystem(minPt shared.Point, maxPt shared.Point) *System[shared.Point] {
-	cfg := negtest.Config{
-		MaxPoint: maxPt,
-		MinPoint: minPt,
-	}
+func NewNegTestSystem(cfg config.RectangleConfig) *System[shared.Point] {
 	gen := negtest.New(cfg)
 	rendCfg := renderers.PointRendererConfig{
-		MinPoint: minPt,
-		MaxPoint: maxPt,
+		MinPoint: cfg.MinPoint,
+		MaxPoint: cfg.MaxPoint,
 	}
 	var pr renderers.PointRenderer
 	pr = ebitrenderer.New()

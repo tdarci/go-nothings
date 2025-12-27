@@ -3,21 +3,17 @@ package fern
 import (
 	"math/rand"
 
+	"github.com/tdarci/go-nothings/ifs/config"
 	"github.com/tdarci/go-nothings/ifs/shared"
 )
 
 const scaleFactor = 100
 
-type Config struct {
-	MaxWidth  float64
-	MaxHeight float64
-}
-
 type Fern struct {
-	config Config
+	config config.FernConfig
 }
 
-func New(cfg Config) *Fern {
+func New(cfg config.FernConfig) *Fern {
 	return &Fern{
 		config: cfg,
 	}

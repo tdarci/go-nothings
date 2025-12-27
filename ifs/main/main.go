@@ -7,23 +7,24 @@ import (
 	"runtime"
 	"time"
 
+	"github.com/tdarci/go-nothings/ifs/config"
 	"github.com/tdarci/go-nothings/ifs/harness"
 	"github.com/tdarci/go-nothings/ifs/shared"
 	"gopkg.in/yaml.v3"
 )
 
 var (
-	defaultConfig = Config{
+	defaultConfig = config.Config{
 		MaxIterations:  100_000,
 		DrawingDelayMs: 2,
-		Triangle: TriangleConfig{
+		Triangle: config.TriangleConfig{
 			EdgeLen: 1_000.0,
 		},
-		Fern: FernConfig{
+		Fern: config.FernConfig{
 			MaxWidth:  1000,
 			MaxHeight: 1000,
 		},
-		Rectangle: RectangleConfig{
+		Rectangle: config.RectangleConfig{
 			MinPoint: shared.Point{X: -200, Y: -300},
 			MaxPoint: shared.Point{X: 100, Y: 200},
 		},
@@ -37,7 +38,7 @@ func main() {
 		fmt.Println("")
 		fmt.Println("=====================================")
 		fmt.Println("Usage:")
-		fmt.Println(" ifs triangle|fern|rectangle")
+		fmt.Println(" ifs triangle|fern|rectangle [configFile]")
 	}
 
 	if len(os.Args) < 3 {
@@ -56,7 +57,7 @@ func main() {
 	// log.SetOutput(f)
 
 	var configFileName string
-	var cfg Config = defaultConfig
+	var cfg config.Config = defaultConfig
 	if len(os.Args) > 3 {
 		configFileName = os.Args[3]
 		data, err := os.ReadFile(configFileName)
@@ -70,18 +71,16 @@ func main() {
 		}
 	}
 
-	log.Printf("FOOBAR config: %+v", cfg)
-
 	var sys *harness.System[shared.Point]
 
 	fractal := os.Args[2]
 	switch fractal {
 	case "triangle":
-		sys = harness.NewSierpinskiSystem(cfg.Triangle.EdgeLen)
+		sys = harness.NewSierpinskiSystem(cfg.Triangle)
 	case "fern":
-		sys = harness.NewFernSystem(cfg.Fern.MaxWidth, cfg.Fern.MaxHeight)
+		sys = harness.NewFernSystem(cfg.Fern)
 	case "rectangle":
-		sys = harness.NewNegTestSystem(cfg.Rectangle.MinPoint, cfg.Rectangle.MaxPoint)
+		sys = harness.NewNegTestSystem(cfg.Rectangle)
 	default:
 		usage()
 		return
@@ -92,26 +91,4 @@ func main() {
 	runtime.LockOSThread()
 
 	harness.Run(sys, cfg.MaxIterations, time.Millisecond*time.Duration(cfg.DrawingDelayMs))
-}
-
-type Config struct {
-	MaxIterations  int             `yaml:"MaxIterations"`
-	DrawingDelayMs int             `yaml:"DrawingDelayMs"`
-	Triangle       TriangleConfig  `yaml:"Triangle"`
-	Fern           FernConfig      `yaml:"Fern"`
-	Rectangle      RectangleConfig `yaml:"Rectangle"`
-}
-
-type TriangleConfig struct {
-	EdgeLen float64 `yaml:"EdgeLen"`
-}
-
-type FernConfig struct {
-	MaxWidth  float64 `yaml:"MaxWidth"`
-	MaxHeight float64 `yaml:"MaxHeight"`
-}
-
-type RectangleConfig struct {
-	MinPoint shared.Point `yaml:"MinPoint"`
-	MaxPoint shared.Point `yaml:"MaxPoint"`
 }
