@@ -1,7 +1,8 @@
 MaxIterations: 100000
-DrawingDelayMs: 
+DrawingDelayMs: 2
 Triangle:
   EdgeLen: 1000.0
+  NumVertices: 3
   # Renderer: "tcell"
   Renderer: "ebitengine"
   # Renderer: "list"

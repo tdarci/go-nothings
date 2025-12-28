@@ -1,14 +1,13 @@
 package sierpinski
 
 import (
+	"log"
 	"math"
 	"math/rand"
 
 	"github.com/tdarci/go-nothings/ifs/config"
 	"github.com/tdarci/go-nothings/ifs/shared"
 )
-
-const numVertices = 3
 
 type Sierpinski struct {
 	config config.TriangleConfig
@@ -26,8 +25,50 @@ type State struct {
 }
 
 func (s *Sierpinski) Initialize() []shared.Point {
-	// todo: more vertices
-	s.state.Vertices = make([]shared.Point, numVertices)
+
+	s.state.Vertices = make([]shared.Point, s.config.NumVertices)
+	var out []shared.Point
+	switch s.config.NumVertices {
+	case 3:
+		out = s.prepareTriangle()
+	case 4:
+		out = s.prepareRectangle()
+	default:
+		log.Fatalf("Incorrect configuration for vertices. Must be between 3 and 4. %d were requested", s.config.NumVertices)
+	}
+	return out
+}
+
+func (s *Sierpinski) prepareRectangle() []shared.Point {
+	legLen := s.config.EdgeLen
+	vA := shared.Point{X: 0, Y: 0}
+	vB := shared.Point{X: legLen, Y: 0}
+	vC := shared.Point{X: 0, Y: legLen}
+	vD := shared.Point{X: legLen, Y: legLen}
+
+	s.state.Vertices[0] = vA
+	s.state.Vertices[1] = vB
+	s.state.Vertices[2] = vC
+	s.state.Vertices[3] = vD
+
+	// get a random point inside
+	r1 := rand.Float64()
+	r2 := rand.Float64()
+	if r1+r2 > 1 {
+		r1 = 1 - r1
+		r2 = 1 - r2
+	}
+
+	initialDot := shared.Point{
+		X: vA.X + r1*legLen,
+		Y: vA.Y + r2*legLen,
+	}
+
+	out := append(s.state.Vertices, initialDot)
+	return out
+}
+
+func (s *Sierpinski) prepareTriangle() []shared.Point {
 	// todo: irregular triangles
 	legLen := s.config.EdgeLen
 	vA := shared.Point{X: 0, Y: legLen}
@@ -61,7 +102,7 @@ func (s *Sierpinski) Initialize() []shared.Point {
 
 func (s *Sierpinski) Next(o shared.Point) shared.Point {
 
-	v := s.state.Vertices[rand.Intn(3)]
+	v := s.state.Vertices[rand.Intn(s.config.NumVertices)]
 
 	out := shared.Point{
 		X: (v.X + o.X) / 2,

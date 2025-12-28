@@ -10,7 +10,34 @@ All fractal generators can be found in directories below the `generators` direct
 
 Each generator is wired up to its renderer in `harness.go`.
 
+The system is driven by a supplied config file. See the default one in `config/defaultCfg.yaml`.
+
 ## To Do
 - [x] Choose fractal to run via command-line argument.
 - [x] Configure via YAML config file.
-- [ ] Add more configuration to each type of fractal.
+- [ ] Add fern configuration for thresholds and coefficients.
+- [ ] Fix tcell renderer (has vertical issue?)
+- [ ] Add one more fractal: Sierpinski Carpet
+- [ ] Modify 4-vertex sierpinski triangle to be multiple triangles, with random point inside rectangle as shared vertex.
+- [ ] Next: Move on to L-Systems.
+
+## Notes
+
+### To use for Sierpinski Carpet
+```
+8 transforms, with equal probability
+
+1: (x/3,           y/3)
+2: (x/3 + 1/3,     y/3)
+3: (x/3 + 2/3,     y/3)
+
+4: (x/3,           y/3 + 1/3)
+5: (x/3 + 2/3,     y/3 + 1/3)
+
+6: (x/3,           y/3 + 2/3)
+7: (x/3 + 1/3,     y/3 + 2/3)
+8: (x/3 + 2/3,     y/3 + 2/3)
+
+Note: throw away first 100 iterations or so.
+
+```
