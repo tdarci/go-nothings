@@ -15,7 +15,8 @@ The system is driven by a supplied config file. See the default one in `config/d
 ## To Do
 - [x] Choose fractal to run via command-line argument.
 - [x] Configure via YAML config file.
-- [ ] Add fern configuration for thresholds and coefficients.
+- [x] Add fern configuration for thresholds.
+- [ ] Add fern configuration for coefficients.
 - [ ] Fix tcell renderer (has vertical issue?)
 - [ ] Add one more fractal: Sierpinski Carpet
 - [ ] Modify 4-vertex sierpinski triangle to be multiple triangles, with random point inside rectangle as shared vertex.

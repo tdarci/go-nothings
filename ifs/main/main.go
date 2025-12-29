@@ -23,6 +23,11 @@ var (
 		Fern: config.FernConfig{
 			MaxWidth:  1000,
 			MaxHeight: 1000,
+			Thresholds: config.FernThresholds{
+				StemBaseThresholdPct: 1,
+				SmallerLeafletThresholdPct: 86,
+				LeftBigLeafletThresholdPct: 93,
+			},
 		},
 		Rectangle: config.RectangleConfig{
 			MinPoint: shared.Point{X: -200, Y: -300},

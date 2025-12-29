@@ -19,6 +19,18 @@ type TriangleConfig struct {
 type FernConfig struct {
 	MaxWidth  float64 `yaml:"MaxWidth"`
 	MaxHeight float64 `yaml:"MaxHeight"`
+	Thresholds FernThresholds `yaml:"Thresholds"`
+}
+
+// FernThresholds define the percentages at which each transformation "kicks in".
+// Each time the generator generates its next point, it selects one of the four (StemBase, SmallerLeaflet, 
+// LeftBigLeaf, RightBigLeaf) to add to based on a random number between 0 and 100, and these thresholds.
+// Note that they must get successively greater. And that the RightBigLeaf threshold is not defined, since
+// it is everything above the threshold for LeftBigLeaf
+type FernThresholds struct {
+	StemBaseThresholdPct int `yaml:"StemBaseThresholdPct"` // canonical is 1
+	SmallerLeafletThresholdPct int `yaml:"SmallerLeafletThresholdPct"` // canonical is 86
+	LeftBigLeafletThresholdPct int `yaml:"LeftBigLeafletThresholdPct"` // canonical is 93
 }
 
 type RectangleConfig struct {

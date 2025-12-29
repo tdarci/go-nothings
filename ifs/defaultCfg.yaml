@@ -9,6 +9,15 @@ Triangle:
 Fern:
   MaxWidth: 800.0
   MaxHeight: 600.0
+  # FernThresholds define the percentages at which each transformation "kicks in".
+  # Each time the generator generates its next point, it selects one of the four (StemBase, SmallerLeaflet, 
+  # LeftBigLeaf, RightBigLeaf) to add to based on a random number between 0 and 100, and these thresholds.
+  # Note that they must get successively greater. And that the RightBigLeaf threshold is not defined, since
+  # it is everything above the threshold for LeftBigLeaf
+  Thresholds:
+    StemBaseThresholdPct: 1
+    SmallerLeafletThresholdPct: 86
+    LeftBigLeafletThresholdPct: 93
 Rectangle:
   MinPoint:
     X: -200
