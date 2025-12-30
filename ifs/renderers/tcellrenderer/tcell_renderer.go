@@ -48,7 +48,7 @@ func (r *TCellRenderer) Draw(p shared.Point) {
 	}
 
 	origScreenW, origScreenH := r.screen.Size()
-	log.Printf("[tcellrenderer.Draw] screen width, height: %d, %d", origScreenW, origScreenH)
+	// log.Printf("[tcellrenderer.Draw] screen width, height: %d, %d", origScreenW, origScreenH)
 	origScreenH = origScreenH * 2 // each vertical "pixel" counts for 2
 	
 	screenW := origScreenW
@@ -85,7 +85,7 @@ func (r *TCellRenderer) Draw(p shared.Point) {
 		return
 	}
 
-	log.Printf("FOOBAR [tcellrenderer.Draw] drawing at %6.2f, %6.2f (from %v)", x, y, p)
+	// log.Printf("FOOBAR [tcellrenderer.Draw] drawing at %6.2f, %6.2f (from %v)", x, y, p)
 	r.screen.SetContent(int(x), int(y), '·', nil, tcell.StyleDefault.Foreground(tcell.ColorYellow))
 	r.screen.Show()
 }
