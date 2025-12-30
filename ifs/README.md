@@ -19,6 +19,7 @@ The system is driven by a supplied config file. See the default one in `config/d
 - [ ] Add fern configuration for coefficients.
 - [x] Fix tcell renderer (has vertical issue?)
 - [ ] Add one more fractal: Sierpinski Carpet
+- [ ] Add another nature-like fractal.
 - [ ] Modify 4-vertex sierpinski triangle to be multiple triangles, with random point inside rectangle as shared vertex.
 - [ ] Next: Move on to L-Systems.
 
