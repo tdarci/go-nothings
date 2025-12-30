@@ -2,9 +2,9 @@ MaxIterations: 100_000
 DrawingDelayMs: 1
 Triangle:
   EdgeLen: 1000.0
-  NumVertices: 4
-  # Renderer: "tcell"
-  Renderer: "ebitengine"
+  NumVertices: 3
+  Renderer: "tcell"
+  # Renderer: "ebitengine"
   # Renderer: "list"
 Fern:
   MaxWidth: 800.0
