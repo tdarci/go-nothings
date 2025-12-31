@@ -8,6 +8,7 @@ import (
 
 	"github.com/tdarci/go-nothings/ifs/config"
 	"github.com/tdarci/go-nothings/ifs/engine"
+	"github.com/tdarci/go-nothings/ifs/generators/carpet"
 	"github.com/tdarci/go-nothings/ifs/generators/fern"
 	"github.com/tdarci/go-nothings/ifs/generators/negtest"
 	"github.com/tdarci/go-nothings/ifs/generators/sierpinski"
@@ -63,6 +64,30 @@ func Run[T any](sys *System[T], maxIterations int, drawingDelay time.Duration) {
 
 func NewSierpinskiSystem(cfg config.TriangleConfig) *System[shared.Point] {
 	gen := sierpinski.New(cfg)
+	rendCfg := renderers.PointRendererConfig{
+		MinPoint: shared.Point{X: 0, Y: 0},
+		MaxPoint: shared.Point{X: cfg.EdgeLen, Y: cfg.EdgeLen},
+	}
+	var pr renderers.PointRenderer
+	switch cfg.Renderer {
+	case "tcell":
+		pr = tcellrenderer.New()
+	case "list":
+		pr = listpointrenderer.New()
+	default:
+		pr = ebitrenderer.New()
+	}
+	pr.Initialize(rendCfg)
+
+	out := &System[shared.Point]{
+		Generator: gen,
+		Renderer:  pr,
+	}
+	return out
+}
+
+func NewCarpetSystem(cfg config.CarpetConfig) *System[shared.Point] {
+	gen := carpet.New(cfg)
 	rendCfg := renderers.PointRendererConfig{
 		MinPoint: shared.Point{X: 0, Y: 0},
 		MaxPoint: shared.Point{X: cfg.EdgeLen, Y: cfg.EdgeLen},

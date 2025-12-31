@@ -43,7 +43,7 @@ func main() {
 		fmt.Println("")
 		fmt.Println("=====================================")
 		fmt.Println("Usage:")
-		fmt.Println(" ifs triangle|fern|rectangle [configFile]")
+		fmt.Println(" ifs triangle|carpet|fern|rectangle [configFile]")
 	}
 
 	if len(os.Args) < 3 {
@@ -81,6 +81,8 @@ func main() {
 	switch fractal {
 	case "triangle":
 		sys = harness.NewSierpinskiSystem(cfg.Triangle)
+	case "carpet":
+		sys = harness.NewCarpetSystem(cfg.Carpet)
 	case "fern":
 		sys = harness.NewFernSystem(cfg.Fern)
 	case "rectangle":
@@ -90,7 +92,7 @@ func main() {
 		return
 	}
 
-	log.Printf("Starting IFS processing of %s at %s...", fractal, timeStr)
+	log.Printf("Starting iterated function system processing of %s at %s...", fractal, timeStr)
 
 	runtime.LockOSThread()
 

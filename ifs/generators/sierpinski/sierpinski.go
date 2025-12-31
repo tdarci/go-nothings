@@ -9,6 +9,7 @@ import (
 	"github.com/tdarci/go-nothings/ifs/shared"
 )
 
+// Sierpinski generates the Sierpinski Triangle.
 type Sierpinski struct {
 	config config.TriangleConfig
 	state  State
@@ -32,6 +33,8 @@ func (s *Sierpinski) Initialize() []shared.Point {
 	case 3:
 		out = s.prepareTriangle()
 	case 4:
+		// This is weird and dumb. Just an experiement. Generates dust, basically.
+		// The proper 4-vertice Sierpinski is the carpet, which is defined in package `generators/carpet`.
 		out = s.prepareRectangle()
 	default:
 		log.Fatalf("Incorrect configuration for vertices. Must be between 3 and 4. %d were requested", s.config.NumVertices)
