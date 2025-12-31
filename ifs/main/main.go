@@ -20,11 +20,14 @@ var (
 		Triangle: config.TriangleConfig{
 			EdgeLen: 1_000.0,
 		},
+		Carpet: config.CarpetConfig{
+			EdgeLen: 1_000.0,
+		},
 		Fern: config.FernConfig{
 			MaxWidth:  1000,
 			MaxHeight: 1000,
 			Thresholds: config.FernThresholds{
-				StemBaseThresholdPct: 1,
+				StemBaseThresholdPct:       1,
 				SmallerLeafletThresholdPct: 86,
 				LeftBigLeafletThresholdPct: 93,
 			},
@@ -52,13 +55,6 @@ func main() {
 	}
 
 	st := time.Now()
-	timeStr := st.Format("2006-01-02_15-04-05")
-	filename := "ifs.log"
-	f, err := os.Create(filename)
-	if err != nil {
-		log.Fatalf("unable to create file %q: %s", filename, err)
-	}
-	log.SetOutput(f)
 
 	var configFileName string
 	var cfg config.Config = defaultConfig
@@ -92,7 +88,17 @@ func main() {
 		return
 	}
 
-	log.Printf("Starting iterated function system processing of %s at %s...", fractal, timeStr)
+	timeStr := st.Format("2006-01-02_15-04-05")
+	logFilename := "ifs.log"
+	log.Printf("==========\nStarting iterated function system processing of %q at %s. Logs are being written to %q\n\n", fractal, timeStr, logFilename)
+
+	f, err := os.Create(logFilename)
+	if err != nil {
+		log.Fatalf("unable to create file %q: %s", logFilename, err)
+	}
+	log.SetOutput(f)
+
+	log.Printf("Starting iterated function system processing of %q at %s...", fractal, timeStr)
 
 	runtime.LockOSThread()
 
