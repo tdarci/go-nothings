@@ -1,0 +1,33 @@
+MaxIterations: 100_000
+DrawingDelayMs: 1
+Triangle:
+  EdgeLen: 1000.0
+  NumVertices: 3
+  Renderer: "tcell"
+  # Renderer: "ebitengine"
+  # Renderer: "list"
+Carpet:
+  EdgeLen: 1000.0
+  # Renderer: "tcell"
+  Renderer: "ebitengine"
+  # Renderer: "list"
+Fern:
+  MaxWidth: 800.0
+  MaxHeight: 600.0
+  # FernThresholds define the percentages at which each transformation "kicks in".
+  # Each time the generator generates its next point, it selects one of the four (StemBase, SmallerLeaflet, 
+  # LeftBigLeaf, RightBigLeaf) to add to based on a random number between 0 and 100, and these thresholds.
+  # Note that they must get successively greater. And that the RightBigLeaf threshold is not defined, since
+  # it is everything above the threshold for LeftBigLeaf
+  Thresholds:
+    StemBaseThresholdPct: 1
+    SmallerLeafletThresholdPct: 10
+    LeftBigLeafletThresholdPct: 20
+Rectangle:
+  MinPoint:
+    X: -200
+    Y: -300
+  MaxPoint:
+    X: 300
+    Y: 100
+  
