@@ -18,5 +18,3 @@ The system is driven by a supplied config file. See the default one in `config/d
 - [x] Add fern configuration for thresholds.
 - [x] Fix tcell renderer (has vertical issue?)
 - [x] Add one more fractal: Sierpinski Carpet
-- [ ] Add another nature-like fractal.
-- [ ] Next: Move on to L-Systems.
