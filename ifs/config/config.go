@@ -9,6 +9,7 @@ type Config struct {
 	Carpet         CarpetConfig    `yaml:"Carpet"`
 	Fern           FernConfig      `yaml:"Fern"`
 	Rectangle      RectangleConfig `yaml:"Rectangle"`
+	LSystem        LSystemConfig   `yaml:"LSystem"`
 }
 
 type TriangleConfig struct {
@@ -26,6 +27,19 @@ type FernConfig struct {
 	MaxWidth   float64        `yaml:"MaxWidth"`
 	MaxHeight  float64        `yaml:"MaxHeight"`
 	Thresholds FernThresholds `yaml:"Thresholds"`
+}
+
+type LSystemConfig struct {
+	Axiom string        `yaml:"Axiom"`
+	Angle int           `yaml:"Angle"`
+	Rules []LSystemRule `yaml:"Rules"`
+}
+
+type LSystemRule struct {
+	Match     string   `yaml:"Match"` // must be one-character long
+	PreMatch  string `yaml:"PreMatch"`
+	PostMatch string `yaml:"PostMatch"`
+	RewriteAs string `yaml:"RewriteAs"`
 }
 
 // FernThresholds define the percentages at which each transformation "kicks in".
