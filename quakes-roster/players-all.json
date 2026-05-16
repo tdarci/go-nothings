@@ -1,0 +1,263 @@
+[
+    {
+        "name": "Jamar Ricketts",
+        "number": "2",
+        "position": "Defender",
+        "age": "24",
+        "birthplace": "Montclair, New Jersey",
+        "image": "images/jamar_ricketts.jpg",
+        "url": "https://www.sjearthquakes.com/players/jamar-ricketts/"
+    },
+    {
+        "name": "Dave Romney",
+        "number": "4",
+        "position": "Defender",
+        "age": "32",
+        "birthplace": "Irvine, CA",
+        "image": "images/dave_romney.jpg",
+        "url": "https://www.sjearthquakes.com/players/dave-romney/"
+    },
+    {
+        "name": "Daniel Munie",
+        "number": "5",
+        "position": "Defender",
+        "age": "26",
+        "birthplace": "Maryland Heights, Mo.",
+        "image": "images/daniel_munie.jpg",
+        "url": "https://www.sjearthquakes.com/players/daniel-munie/"
+    },
+    {
+        "name": "Paul Marie",
+        "number": "3",
+        "position": "Defender",
+        "age": "31",
+        "birthplace": "Saint-Aubin-des-Bois, France",
+        "image": "images/paul_marie.jpg",
+        "url": "https://www.sjearthquakes.com/players/paul-marie/"
+    },
+    {
+        "name": "Ousseni Bouda",
+        "number": "7",
+        "position": "Forward",
+        "age": "26",
+        "birthplace": "Ouagadougou, Burkina Faso",
+        "image": "images/ousseni_bouda.jpg",
+        "url": "https://www.sjearthquakes.com/players/ousseni-bouda-x9038/"
+    },
+    {
+        "name": "Niko Tsakiris",
+        "number": "10",
+        "position": "Midfielder",
+        "age": "20",
+        "birthplace": "Saratoga, CA",
+        "image": "images/niko_tsakiris.jpg",
+        "url": "https://www.sjearthquakes.com/players/niko-tsakiris/"
+    },
+    {
+        "name": "Ian Harkes",
+        "number": "6",
+        "position": "Midfielder",
+        "age": "31",
+        "birthplace": "Fairfax, VA",
+        "image": "images/ian_harkes.jpg",
+        "url": "https://www.sjearthquakes.com/players/ian-harkes/"
+    },
+    {
+        "name": "Timo Werner",
+        "number": "11",
+        "position": "Forward",
+        "age": "30",
+        "birthplace": "Stuttgart, Germany",
+        "image": "images/timo_werner.jpg",
+        "url": "https://www.sjearthquakes.com/players/timo-werner/"
+    },
+    {
+        "name": "Jack Skahan",
+        "number": "16",
+        "position": "Midfielder",
+        "age": "28",
+        "birthplace": "Memphis, TN",
+        "image": "images/jack_skahan.jpg",
+        "url": "https://www.sjearthquakes.com/players/jack-skahan/"
+    },
+    {
+        "name": "Jack Jasinski",
+        "number": "17",
+        "position": "Defender",
+        "age": "22",
+        "birthplace": "Charlotte, N.C.",
+        "image": "images/jack_jasinski.jpg",
+        "url": "https://www.sjearthquakes.com/players/jack-jasinski/"
+    },
+    {
+        "name": "Ronaldo Vieira",
+        "number": "14",
+        "position": "Midfielder",
+        "age": "27",
+        "birthplace": "",
+        "image": "images/ronaldo_vieira.jpg",
+        "url": "https://www.sjearthquakes.com/players/ronaldo-vieira/"
+    },
+    {
+        "name": "Preston Judd",
+        "number": "19",
+        "position": "Forward",
+        "age": "26",
+        "birthplace": "Las Vegas, NV",
+        "image": "images/preston_judd.jpg",
+        "url": "https://www.sjearthquakes.com/players/preston-judd/"
+    },
+    {
+        "name": "Reid Roberts",
+        "number": "18",
+        "position": "Defender",
+        "age": "22",
+        "birthplace": "Fort Collins, Co",
+        "image": "images/reid_roberts.jpg",
+        "url": "https://www.sjearthquakes.com/players/reid-roberts/"
+    },
+    {
+        "name": "Nate Crockford",
+        "number": "22",
+        "position": "Goalkeeper",
+        "age": "23",
+        "birthplace": "Northfield, Ill.",
+        "image": "images/nate_crockford.jpg",
+        "url": "https://www.sjearthquakes.com/players/nathan-crockford/"
+    },
+    {
+        "name": "Noel Buck",
+        "number": "21",
+        "position": "Midfielder",
+        "age": "21",
+        "birthplace": "Arlington, MA",
+        "image": "images/noel_buck.jpg",
+        "url": "https://www.sjearthquakes.com/players/noel-buck/"
+    },
+    {
+        "name": "DeJuan Jones",
+        "number": "24",
+        "position": "Defender",
+        "age": "28",
+        "birthplace": "Lansing, MI",
+        "image": "images/dejuan_jones.jpg",
+        "url": "https://www.sjearthquakes.com/players/dejuan-jones/"
+    },
+    {
+        "name": "Nick Fernandez",
+        "number": "20",
+        "position": "Midfielder",
+        "age": "24",
+        "birthplace": "Downers Grove, IL",
+        "image": "images/nick_fernandez.jpg",
+        "url": "https://www.sjearthquakes.com/players/nick-fernandez/"
+    },
+    {
+        "name": "Kaedren Spivey",
+        "number": "29",
+        "position": "Midfielder",
+        "age": "16",
+        "birthplace": "San Jose, CA",
+        "image": "images/kaedren_spivey.jpg",
+        "url": "https://www.sjearthquakes.com/players/kaedren-spivey/"
+    },
+    {
+        "name": "Francesco Montali",
+        "number": "31",
+        "position": "Goalkeeper",
+        "age": "25",
+        "birthplace": "Davie, FL",
+        "image": "images/francesco_montali.jpg",
+        "url": "https://www.sjearthquakes.com/players/francesco-montali/"
+    },
+    {
+        "name": "Benji Kikanović",
+        "number": "28",
+        "position": "Defender",
+        "age": "26",
+        "birthplace": "Sacramento, CA",
+        "image": "images/benji_kikanović.jpg",
+        "url": "https://www.sjearthquakes.com/players/benji-kikanovic/"
+    },
+    {
+        "name": "Max Floriani",
+        "number": "25",
+        "position": "Defender",
+        "age": "23",
+        "birthplace": "Gurnee, IL",
+        "image": "images/max_floriani.jpg",
+        "url": "https://www.sjearthquakes.com/players/max-floriani/"
+    },
+    {
+        "name": "Nonso Adimabua",
+        "number": "32",
+        "position": "Forward",
+        "age": "25",
+        "birthplace": "Asaba, Nigeria",
+        "image": "images/nonso_adimabua.jpg",
+        "url": "https://www.sjearthquakes.com/players/nonso-adimabua/"
+    },
+    {
+        "name": "Earl Edwards Jr.",
+        "number": "36",
+        "position": "Goalkeeper",
+        "age": "34",
+        "birthplace": "San Diego, CA",
+        "image": "images/earl_edwards_jr.jpg",
+        "url": "https://www.sjearthquakes.com/players/earl-edwards-jr/"
+    },
+    {
+        "name": "Rohan Rajagopal",
+        "number": "35",
+        "position": "Midfielder",
+        "age": "18",
+        "birthplace": "Los Altos, Calif.",
+        "image": "images/rohan_rajagopal.jpg",
+        "url": "https://www.sjearthquakes.com/players/rohan-rajagopal/"
+    },
+    {
+        "name": "Beau Leroux",
+        "number": "34",
+        "position": "Midfielder",
+        "age": "22",
+        "birthplace": "San Jose, CA",
+        "image": "images/beau_leroux.jpg",
+        "url": "https://www.sjearthquakes.com/players/beau-leroux/"
+    },
+    {
+        "name": "Jonathan Gonzalez",
+        "number": "40",
+        "position": "Midfielder",
+        "age": "27",
+        "birthplace": "Santa Rosa, CA",
+        "image": "images/jonathan_gonzalez.jpg",
+        "url": "https://www.sjearthquakes.com/players/jonathan-gonzalez/"
+    },
+    {
+        "name": "Daniel",
+        "number": "42",
+        "position": "Goalkeeper",
+        "age": "32",
+        "birthplace": "Barra do Garças, Brazil",
+        "image": "images/daniel.jpg",
+        "url": "https://www.sjearthquakes.com/players/daniel/"
+    },
+    {
+        "name": "Vitor Costa",
+        "number": "87",
+        "position": "Defender",
+        "age": "31",
+        "birthplace": "Valente, Brazil",
+        "image": "images/vitor_costa.jpg",
+        "url": "https://www.sjearthquakes.com/players/vitor-costa-de-brito/"
+    },
+    {
+        "name": "Edwyn Mendoza",
+        "number": "38",
+        "position": "Midfielder",
+        "age": "20",
+        "birthplace": "San Jose, CA",
+        "image": "images/edwyn_mendoza.jpg",
+        "url": "https://www.sjearthquakes.com/players/edwyn-mendoza/"
+    }
+]
